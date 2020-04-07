@@ -26,7 +26,7 @@ programmatically.
 ```{r, install, eval = FALSE}
 if(!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("mitch")
+BiocManager::install("getDEE2")
 ```
 
 ```{r, lib}

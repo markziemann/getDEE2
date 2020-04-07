@@ -10,7 +10,7 @@
 #' @import utils
 #' @export
 #' @examples
-#' ecoli_metadatahea<-getDee2Metadata("ecoli")
+#' ecoli_metadata<-getDee2Metadata("ecoli")
 getDee2Metadata<-function(species,outfile=NULL, ...){
     orgs=c("athaliana","celegans","dmelanogaster","drerio","ecoli","hsapiens",
     "mmusculus","rnorvegicus","scerevisiae")
@@ -73,7 +73,8 @@ queryDee2<-function(species, SRRvec,metadata=NULL, ...) {
 #' @import utils
 #' @export
 #' @examples
-#' x<-loadGeneCounts("~/Downloads/Data.zip")
+#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' y<-loadGeneCounts("mydata.zip")
 loadGeneCounts<-function(zipname){
     CM="GeneCountMatrix.tsv"
     TF=tempfile()
@@ -95,7 +96,8 @@ loadGeneCounts<-function(zipname){
 #' @import utils
 #' @export
 #' @examples
-#' x<-loadTxCounts("~/Downloads/Data.zip")
+#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' y<-loadTxCounts("mydata.zip")
 loadTxCounts<-function(zipname){
     CM="TxCountMatrix.tsv"
     TF=tempfile()
@@ -117,7 +119,8 @@ loadTxCounts<-function(zipname){
 #' @import utils
 #' @export
 #' @examples
-#' x<-loadGeneInfo("~/Downloads/Data.zip")
+#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' y<-loadGeneInfo("mydata.zip")
 loadGeneInfo<-function(zipname){
     CM="GeneInfo.tsv"
     TF=tempfile()
@@ -140,7 +143,8 @@ loadGeneInfo<-function(zipname){
 #' @import utils
 #' @export
 #' @examples
-#' x<-loadTxInfo("~/Downloads/Data.zip")
+#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' y<-loadTxInfo("mydata.zip")
 loadTxInfo<-function(zipname){
     CM="TxInfo.tsv"
     TF=tempfile()
@@ -163,7 +167,8 @@ loadTxInfo<-function(zipname){
 #' @import utils
 #' @export
 #' @examples
-#' x<-loadQcMx("~/Downloads/Data.zip")
+#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' y<-loadQcMx("mydata.zip")
 loadQcMx<-function(zipname){
     CM="QC_Matrix.tsv"
     TF=tempfile()
@@ -187,7 +192,8 @@ loadQcMx<-function(zipname){
 #' @import utils
 #' @export
 #' @examples
-#' x<-loadQcMx("~/Downloads/Data.zip")
+#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' y<-loadQcMx("mydata.zip")
 loadSummaryMeta<-function(zipname){
     CM="MetadataSummary.tsv"
     TF=tempfile()
@@ -208,7 +214,8 @@ loadSummaryMeta<-function(zipname){
 #' @import utils
 #' @export
 #' @examples
-#' x<-loadQcMx("~/Downloads/Data.zip")
+#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' y<-loadQcMx("mydata.zip")
 loadFullMeta<-function(zipname){
     CM="MetadataFull.tsv"
     TF=tempfile()
@@ -233,7 +240,6 @@ loadFullMeta<-function(zipname){
 #' @examples
 #' x<-getDEE2("celegans",c("SRR3657716","SRR3657717"))
 #' x<-Tx2Gene(x)
-#' head(x$Tx2Gene)
 Tx2Gene<-function(x){
     y<-merge(x$TxInfo,x$TxCounts,by=0)
     rownames(y)=y$Row.names

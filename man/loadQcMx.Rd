@@ -18,7 +18,8 @@ metrics is available from the project github page:
 https://github.com/markziemann/dee2/blob/master/qc/qc_metrics.md
 }
 \examples{
-x<-loadQcMx("~/Downloads/Data.zip")
+x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+y<-loadQcMx("mydata.zip")
 }
 \keyword{Control}
 \keyword{Load}

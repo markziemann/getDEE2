@@ -16,7 +16,8 @@ a dataframe of full metadata.
 This function loads the full metadata, which contains many fields.
 }
 \examples{
-x<-loadQcMx("~/Downloads/Data.zip")
+x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+y<-loadQcMx("mydata.zip")
 }
 \keyword{Load}
 \keyword{Metadata}

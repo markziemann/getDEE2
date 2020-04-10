@@ -20,7 +20,6 @@ aggregated gene level score.
 \examples{
 x<-getDEE2("celegans",c("SRR3657716","SRR3657717"))
 x<-Tx2Gene(x)
-head(x$Tx2Gene)
 }
 \keyword{Aggregate}
 \keyword{gene}

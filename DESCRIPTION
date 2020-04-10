@@ -1,6 +1,6 @@
 Package: getDEE2
 Title: An R Interface for the DEE2 Transcriptome Database
-Version: 0.99.7
+Version: 0.99.8
 Authors@R: person(given="Mark",
     family="Ziemann",
     email = "mark.ziemann@gmail.com",

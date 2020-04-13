@@ -8,7 +8,7 @@ Authors@R: person(given="Mark",
 Description: This package simplifies the process of obtaining gene expression 
     data from the DEE2 database (http://dee2.io).
 Depends: R (>= 4.0)
-Imports: stats, utils
+Imports: stats, utils, SummarizedExperiment
 Suggests: knitr, testthat
 License: GPL-3
 Encoding: UTF-8

@@ -6,7 +6,6 @@
 #' @param ... Additional parameters to be passed to download.file.
 #' @return a table of metadata.
 #' @keywords metadata
-#' @import stats
 #' @import utils
 #' @export
 #' @examples
@@ -235,7 +234,7 @@ loadFullMeta<-function(zipname){
 #' @param x a getDEE2 object.
 #' @keywords Aggregate transcript gene
 #' @return a dataframe of gene expression counts.
-#' @import stats
+#' @importFrom stats aggregate
 #' @export
 #' @examples
 #' x<-getDEE2("celegans",c("SRR3657716","SRR3657717"))
@@ -263,7 +262,6 @@ Tx2Gene<-function(x){
 #' @param ... Additional parameters to be passed to download.file.
 #' @keywords DEE2 RNA-seq database
 #' @return a getDEE2 object.
-#' @import stats
 #' @import utils
 #' @export
 #' @examples
@@ -314,3 +312,37 @@ baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
         return(dat)
     }
 }
+
+#' Create summarizedExperiment object
+#'
+#' This function creates a SummarizedExperiment object from a getDEE2 dataset
+#' @param x a getDEE2 object.
+#' @param counts select "GeneCounts" for STAR based gene counts, "TxCounts" for
+#' kallisto transcript level counts or "Tx2Gene" for transcript counts
+#' aggregated to gene level. Default is "GeneCounts"
+#' @keywords SummarizedExperiment
+#' @return a SummarizedExperiment object
+#' @import SummarizedExperiment 
+#' @export
+#' @examples
+#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"))
+#' y<-se(x)
+se<-function(x,counts="GeneCounts"){
+    if ( (counts == "GeneCounts" ) | is.null(counts) ) {
+        myse<-SummarizedExperiment(assays=list(counts=x$GeneCounts),
+        colData=data.frame(x$MetadataFull,t(x$QcMx)))
+    } else if (counts == "TxCounts") {
+        myse<-SummarizedExperiment(assays=list(counts=x$TxCounts),
+        colData=data.frame(x$MetadataFull,t(x$QcMx)))
+    } else if (counts == "Tx2Gene") {
+        if ( length(which(names(x) == "Tx2Gene"))==0 ) {
+            x<-Tx2Gene(x)
+        }
+        myse<-SummarizedExperiment(assays=list(counts=x$Tx2Gene),
+        colData=data.frame(x$MetadataFull,t(x$QcMx)))
+    } else {
+        stop("'Counts' needs to be 'GeneCounts', 'TxCounts' or 'Tx2Gene'")
+    }
+    myse
+}
+

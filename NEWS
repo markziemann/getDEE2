@@ -1,3 +1,8 @@
+CHANGES IN VERSION 0.99.9
+------------------------
+   o New function se() which constructs SummarizedExperiment object
+
+
 CHANGES IN VERSION 0.0.2
 ------------------------
    o Some slight change to the vignette

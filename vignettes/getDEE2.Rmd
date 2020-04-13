@@ -3,12 +3,12 @@ title: "getDEE2"
 author: "Mark Ziemann"
 date: "`r Sys.Date()`"
 output: 
-  rmarkdown::html_vignette:
+    rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{getDEE2}
-  %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+    %\VignetteIndexEntry{getDEE2}
+    %\VignetteEngine{knitr::rmarkdown}
+    \usepackage[utf8]{inputenc}
 ---
 
 ## Background
@@ -17,6 +17,10 @@ Digital Expression Explorer 2 (or DEE2 for short) is a repository of processed
 RNA-seq data in the form of counts. It was designed so that researchers could
 undertake re-analysis and meta-analysis of published RNA-seq studies quickly 
 and easily.
+
+For further information about the resource, refer to the
+[journal article](https://doi.org/10.1093/gigascience/giz022) and
+[project homepage](http://dee2.io).
 
 This package provides an interface to access these expression data
 programmatically. 
@@ -36,7 +40,7 @@ library("getDEE2")
 ## Searching for datasets of interest starting with accession numbers
 
 The first step is to download the list of accession numbers of available
-datasets with the 'getDee2Metadata' function, specifying a species name. The
+datasets with the `getDee2Metadata` function, specifying a species name. The
 options for species currently are:
 
 * athaliana
@@ -51,12 +55,11 @@ options for species currently are:
 
 If the species name is incorrect, an error will be thrown.
 
-
 ```{r, getmeta}
 mdat<-getDee2Metadata("celegans")
 head(mdat)
 ```
-If we have a GEO series accession number in mind already (eg: GSE33569)
+If we have a SRA project accession number in mind already (eg: SRP009256)
 then we can see if the datasets are present.
 
 ```{r, filtermeta}
@@ -109,7 +112,7 @@ head(x$GeneInfo)
 head(x$TxInfo)
 ```
 
-Notice the new objects x$GeneInfo and x$TxInfo. They have information on the
+Notice the new objects `x$GeneInfo` and `x$TxInfo`. They have information on the
 gene and transcript lengths that might be useful for calculating FPKM. Gene
 symbol information might be useful for downstream analysis. The TxInfo
 dataframe contains the relationships between the transcript and parent genes.
@@ -130,9 +133,9 @@ there will be a warning message.
 x<-getDEE2("celegans",c("SRR363798","SRR363799","SRR3581689","SRR3581692"))
 ```
 
-In this case the accessions SRR3581689 and SRR3581692 are A. thaliana
-accessions and therefore not present in the C. elegans accession list. The list
-of absent accessions is provided in case you need these for your records.
+In this case the accessions SRR3581689 and SRR3581692 are *A. thaliana*
+accessions and therefore not present in the *C. elegans* accession list. The
+list of absent accessions is provided in case you need these for your records.
 
 ```{r, showabsent}
 x$absent
@@ -163,7 +166,7 @@ aggregated easily in R.
 (http://stackoverflow.com/questions/26046776/sum-two-columns-in-r)
 provides some examples. Here is one way:
 
-```
+```{r,aggregate}
 x<-getDEE2("celegans",c("SRR1176644","SRR1176645") )
 gcounts<-x$GeneCounts
 head(gcounts)
@@ -171,6 +174,18 @@ head(gcounts)
 gcounts$sum<-gcounts$SRR1176644+gcounts$SRR1176645
 head(gcounts)
 ```
+
+## SummarizedExperiment construction
+A SummarizedExperiment object can be created from DEE2 data using the `se` 
+function. The 'counts' parameter controls the type of counts to use:
+* `GeneCounts` STAR gene level counts
+* `TxCounts` Kallisto transcript level counts
+* `Tx2Gene` transcript counts agggregated to the gene level.
+```{r,se}
+y<-se(x,counts="GeneCounts")
+y
+```
+
 ## Downstream analysis
 
 DEE2 data are perfectly suitable for downstream analysis with edgeR, DESeq2,

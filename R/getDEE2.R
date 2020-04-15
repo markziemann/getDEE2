@@ -249,10 +249,10 @@ Tx2Gene<-function(x){
     x<-c(list("Tx2Gene"=yy),x)
 }
 
-#' Get DEE2 Gene Expression Data
+#' Get DEE2 Gene Expression Data (Legacy)
 #'
 #' This function fetches gene expression data from the DEE2 database of RNA
-#' sequencing data.
+#' sequencing data and returns it as a getDEE2 object.
 #' @param species A character string matching the species of interest.   
 #' @param SRRvec A character string or vector of SRA run accession numbers
 #' @param outfile An optional file name for the downloaded dataset.
@@ -266,7 +266,7 @@ Tx2Gene<-function(x){
 #' @export
 #' @examples
 #' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"))
-getDEE2<-function(species, SRRvec, outfile=NULL, metadata=NULL,
+getDEE2_legacy<-function(species, SRRvec, outfile=NULL, metadata=NULL,
 baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
     if(is.null(metadata)){
         dat1<-queryDee2(species, SRRvec)
@@ -344,5 +344,77 @@ se<-function(x,counts="GeneCounts"){
         stop("'Counts' needs to be 'GeneCounts', 'TxCounts' or 'Tx2Gene'")
     }
     myse
+}
+
+#' Get DEE2 Gene Expression Data
+#'
+#' This function fetches gene expression data from the DEE2 database of RNA
+#' sequencing data and returns it as a SummarizedExperiment object.
+#' @param species A character string matching the species of interest.   
+#' @param SRRvec A character string or vector of SRA run accession numbers
+#' @param counts A string, either 'GeneCounts', 'TxCounts' or 'Tx2Gene'.
+#' When 'GeneCounts' is specified, STAR gene level counts are returned.
+#' When 'TxCounts' is specified, kallisto transcript counts are returned.
+#' When 'Tx2Gene' is specified, kallisto counts aggregated (sum)on gene are
+#' returned.
+#' @param outfile An optional file name for the downloaded dataset.
+#' @param metadata An optional file name for the meta data
+#' @param baseURL The base URL of the service. Leave this as the default URL
+#' unless you want to download from a 3rd party mirror.
+#' @param ... Additional parameters to be passed to download.file.
+#' @keywords DEE2 RNA-seq database
+#' @return a SummarizedExperiment object.
+#' @import utils
+#' @import SummarizedExperiment 
+#' @export
+#' @examples
+#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"))
+getDEE2<-function(species, SRRvec, outfile=NULL, metadata=NULL, counts=NULL,
+baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
+    if(is.null(metadata)){
+        dat1<-queryDee2(species, SRRvec)
+    } else {
+        dat1<-queryDee2(species, SRRvec,metadata=metadata)
+    }
+    absent<-dat1$absent
+    present<-dat1$present
+    if ( length(present) < 1 ) {
+        message("Error. None of the specified SRR accessions are present.")
+    } else {
+        SRRvec<-gsub(" ","",present)
+        llist<-paste0("&x=",paste(SRRvec,collapse = "&x="))
+        murl <- paste0(baseURL,"org=",species, llist)
+        if(is.null(outfile)){
+            zipname=tempfile()
+        } else {
+            zipname=outfile
+            if(!grepl(".zip$",zipname)){
+                zipname=paste0(zipname,".zip")
+            }
+        }
+        download.file(murl, destfile=zipname, mode = "wb", ...)
+        GeneCounts<-loadGeneCounts(zipname)
+        TxCounts<-loadTxCounts(zipname)
+        GeneInfo<-loadGeneInfo(zipname)
+        TxInfo<-loadTxInfo(zipname)
+        QcMx<-loadQcMx(zipname)
+        MetadataSummary<-loadSummaryMeta(zipname)
+        MetadataFull<-loadFullMeta(zipname)
+        dat <- list("GeneCounts" = GeneCounts, "TxCounts" = TxCounts,
+        "GeneInfo" = GeneInfo,"TxInfo" = TxInfo , "QcMx" = QcMx,
+        "MetadataSummary" = MetadataSummary , "MetadataFull" = MetadataFull ,
+        "absent" = absent)
+
+        if(is.null(outfile)){
+            unlink(zipname)
+        }
+        if(length(absent)>0){
+            message(paste0("Warning, datasets not found: '",
+            paste(absent,collapse=","),"'"))
+        }
+        if(is.null(counts)) { counts="GeneCounts" }
+        dat2<-se(dat,counts=counts)
+        return(dat2)
+    }
 }
 

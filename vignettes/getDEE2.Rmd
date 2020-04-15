@@ -4,7 +4,7 @@ author: "Mark Ziemann"
 date: "`r Sys.Date()`"
 output: 
     rmarkdown::html_vignette:
-    toc: true
+        toc: true
 vignette: >
     %\VignetteIndexEntry{getDEE2}
     %\VignetteEngine{knitr::rmarkdown}

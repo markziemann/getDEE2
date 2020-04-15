@@ -178,9 +178,13 @@ head(gcounts)
 ## SummarizedExperiment construction
 A SummarizedExperiment object can be created from DEE2 data using the `se` 
 function. The 'counts' parameter controls the type of counts to use:
+
 * `GeneCounts` STAR gene level counts
+
 * `TxCounts` Kallisto transcript level counts
+
 * `Tx2Gene` transcript counts agggregated to the gene level.
+
 ```{r,se}
 y<-se(x,counts="GeneCounts")
 y

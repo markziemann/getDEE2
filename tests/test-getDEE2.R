@@ -7,7 +7,7 @@ test_that("multiplication works", {
 
 
 # E. coli 
-x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"))
+x<-getDEE2_legacy("ecoli",c("SRR1613487","SRR1613488"))
 
 test_that("eco works", {
     expect_equal( sum(x$GeneCounts) , 20624168 )
@@ -15,7 +15,7 @@ test_that("eco works", {
 
 
 # C. elegans
-x<-getDEE2("celegans",c("SRR051935","SRR051934"))
+x<-getDEE2_legacy("celegans",c("SRR051935","SRR051934"))
 
 test_that("cel works", {
     expect_equal( sum(x$TxCounts) , 29067 )
@@ -23,7 +23,7 @@ test_that("cel works", {
 
 
 # M. musculus
-x<-getDEE2("mmusculus",c("SRR1022283","SRR1022284"))
+x<-getDEE2_legacy("mmusculus",c("SRR1022283","SRR1022284"))
 x<-Tx2Gene(x)
 
 test_that("mmu works", {

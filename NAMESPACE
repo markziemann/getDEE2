@@ -2,6 +2,7 @@
 
 export(Tx2Gene)
 export(getDEE2)
+export(getDEE2_legacy)
 export(getDee2Metadata)
 export(loadFullMeta)
 export(loadGeneCounts)

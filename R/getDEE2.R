@@ -1,3 +1,28 @@
+#' getDEE2: Programmatic access to the DEE2 RNA expression dataset
+#'
+#' Digital Expression Explorer 2 (or DEE2 for short) is a repository of
+#' processed RNA-seq data in the form of counts. It was designed so that
+#' researchers could undertake re-analysis and meta-analysis of published
+#' RNA-seq studies quickly and easily. This package provides an R interface
+#' to access these expression data. More information about the DEE2 project
+#' can be found at the project homepage (http://dee2.io) and main publication
+#' (https://doi.org/10.1093/gigascience/giz022).
+#'
+#' @docType package
+#' @name getDEE2
+#' @examples
+#' # Example workflow
+#' # Fetch metadata
+#' mdat<-getDee2Metadata("celegans")
+#' # filter metadata for SRA project SRP009256
+#' mdat1<-mdat[which(mdat$SRP_accession %in% "SRP009256"),]
+#' # create a vector of SRA run accessions to fetch
+#' SRRvec<-as.vector(mdat1$SRR_accession)
+#' # obtain the data as a SummarizedExperiment
+#' x<-getDEE2("celegans",SRRvec,metadata=mdat,counts="GeneCounts")
+#' # Next, downstream analysis with your favourite Bioconductor tools :)
+NULL
+
 #' Get DEE2 Metadata
 #'
 #' This function fetches the short metadata for the species of interest.
@@ -237,7 +262,7 @@ loadFullMeta<-function(zipname){
 #' @importFrom stats aggregate
 #' @export
 #' @examples
-#' x<-getDEE2("celegans",c("SRR3657716","SRR3657717"))
+#' x<-getDEE2_legacy("celegans",c("SRR3657716","SRR3657717"))
 #' x<-Tx2Gene(x)
 Tx2Gene<-function(x){
     y<-merge(x$TxInfo,x$TxCounts,by=0)
@@ -254,9 +279,11 @@ Tx2Gene<-function(x){
 #' This function fetches gene expression data from the DEE2 database of RNA
 #' sequencing data and returns it as a getDEE2 object.
 #' @param species A character string matching the species of interest.   
-#' @param SRRvec A character string or vector of SRA run accession numbers
+#' @param SRRvec A character string or vector of SRA run accession numbers.
 #' @param outfile An optional file name for the downloaded dataset.
-#' @param metadata An optional file name for the meta data
+#' @param metadata (Optional) name of R object for the meta data. Providing
+#' the metadata will speed up performance if multiple queries are made in a
+#' session.
 #' @param baseURL The base URL of the service. Leave this as the default URL
 #' unless you want to download from a 3rd party mirror.
 #' @param ... Additional parameters to be passed to download.file.
@@ -265,7 +292,7 @@ Tx2Gene<-function(x){
 #' @import utils
 #' @export
 #' @examples
-#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"))
+#' x<-getDEE2_legacy("ecoli",c("SRR1613487","SRR1613488"))
 getDEE2_legacy<-function(species, SRRvec, outfile=NULL, metadata=NULL,
 baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
     if(is.null(metadata)){
@@ -325,7 +352,7 @@ baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
 #' @import SummarizedExperiment 
 #' @export
 #' @examples
-#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"))
+#' x<-getDEE2_legacy("ecoli",c("SRR1613487","SRR1613488"))
 #' y<-se(x)
 se<-function(x,counts="GeneCounts"){
     if ( (counts == "GeneCounts" ) | is.null(counts) ) {
@@ -348,17 +375,19 @@ se<-function(x,counts="GeneCounts"){
 
 #' Get DEE2 Gene Expression Data
 #'
-#' This function fetches gene expression data from the DEE2 database of RNA
-#' sequencing data and returns it as a SummarizedExperiment object.
+#' The getDEE2 function fetches gene expression data from the DEE2 database 
+#' of RNA sequencing data and returns it as a SummarizedExperiment object.
 #' @param species A character string matching the species of interest.   
-#' @param SRRvec A character string or vector of SRA run accession numbers
+#' @param SRRvec A character string or vector of SRA run accession numbers.
 #' @param counts A string, either 'GeneCounts', 'TxCounts' or 'Tx2Gene'.
 #' When 'GeneCounts' is specified, STAR gene level counts are returned.
 #' When 'TxCounts' is specified, kallisto transcript counts are returned.
-#' When 'Tx2Gene' is specified, kallisto counts aggregated (sum)on gene are
-#' returned.
+#' When 'Tx2Gene' is specified, kallisto counts aggregated (by sum) on gene
+#' are returned. If left blank, "GeneCounts" will be fetched.
 #' @param outfile An optional file name for the downloaded dataset.
-#' @param metadata An optional file name for the meta data
+#' @param metadata (Optional) name of R object for the meta data. Providing
+#' the metadata will speed up performance if multiple queries are made in a
+#' session. If left blank, the metadata will be fetched once again.
 #' @param baseURL The base URL of the service. Leave this as the default URL
 #' unless you want to download from a 3rd party mirror.
 #' @param ... Additional parameters to be passed to download.file.
@@ -369,8 +398,8 @@ se<-function(x,counts="GeneCounts"){
 #' @export
 #' @examples
 #' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"))
-getDEE2<-function(species, SRRvec, outfile=NULL, metadata=NULL, counts=NULL,
-baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
+getDEE2<-function(species, SRRvec, counts="GeneCounts", metadata=NULL,
+    outfile=NULL, baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
     if(is.null(metadata)){
         dat1<-queryDee2(species, SRRvec)
     } else {
@@ -404,7 +433,6 @@ baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
         "GeneInfo" = GeneInfo,"TxInfo" = TxInfo , "QcMx" = QcMx,
         "MetadataSummary" = MetadataSummary , "MetadataFull" = MetadataFull ,
         "absent" = absent)
-
         if(is.null(outfile)){
             unlink(zipname)
         }

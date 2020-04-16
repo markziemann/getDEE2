@@ -1,5 +1,5 @@
 ---
-title: "getDEE2"
+title: "getDEE2: Programmatic access to the DEE2 RNA expression dataset"
 author: "Mark Ziemann"
 date: "`r Sys.Date()`"
 output: 
@@ -16,7 +16,8 @@ vignette: >
 Digital Expression Explorer 2 (or DEE2 for short) is a repository of processed
 RNA-seq data in the form of counts. It was designed so that researchers could
 undertake re-analysis and meta-analysis of published RNA-seq studies quickly 
-and easily.
+and easily. As of April 2020, nearly 1 million SRA datasets have been
+processed.
 
 For further information about the resource, refer to the
 [journal article](https://doi.org/10.1093/gigascience/giz022) and
@@ -85,7 +86,7 @@ The general syntax for obtaining DEE2 data is this:
 First, the function queries the metadata to make sure that the requested
 datasets are present. If metadata is not specified, then it will download
 a 'fresh' copy of the metadata. It then fetches the requested expression
-data and constructs a SummarizedExperiment object. The 'counts' parameter
+data and constructs a `SummarizedExperiment` object. The 'counts' parameter
 controls the type of counts provided:
 
 * `GeneCounts` STAR gene level counts (this is the default)
@@ -103,12 +104,13 @@ The SRR numbers need to exactly match those in SRA.
 Here is an example of using the SRR vector as defined above. 
 
 ```{r, example1}
+suppressPackageStartupMessages(library("SummarizedExperiment"))
 x<-getDEE2("celegans",SRRvec,metadata=mdat)
 x
 # show sample level metadata
-x@colData[1:6]
+colData(x)[1:7]
 # show the counts
-head(x@assays@data@listData$counts)
+head(assays(x)$counts)
 ```
 
 You can directly specify the SRR accessions in the command line, but be sure to
@@ -116,7 +118,8 @@ type them correctly. In case SRR accessions are not present in the database,
 there will be a warning message.
 
 ```{r, testabsent}
-x<-getDEE2("celegans",c("SRR363798","SRR363799","SRR3581689","SRR3581692"),metadata=mdat)
+x<-getDEE2("celegans",c("SRR363798","SRR363799","SRR3581689","SRR3581692"),
+    metadata=mdat)
 ```
 
 In this case the accessions SRR3581689 and SRR3581692 are *A. thaliana*
@@ -124,8 +127,32 @@ accessions and therefore not present in the *C. elegans* accession list.
 
 ## Downstream analysis
 
-DEE2 data are perfectly suitable for downstream analysis with edgeR, DESeq2,
+DEE2 data are perfectly suitable for downstream analysis with 
+[edgeR](https://bioconductor.org/packages/edgeR/), 
+[DESeq2](https://bioconductor.org/packages/DESeq2/),
 and many other gene expression and pathway enrichment tools.
+For more information wbout working with SummarizedExperiment refer to the
+[rnaseqGene package](https://bioconductor.org/packages/rnaseqGene/) which
+describes a workflow for differential gene expression of SummarizedExperiment
+objects.
+
+## Legacy function
+
+The function getDEE2 is provided for completeness but is no longer
+recommended. It gives DEE2 data in the form of a list object with slots
+for gene counts, transcript counts, gene length, transcript length, quality
+control data, sample metadata summary, sample metadata (full) and any absent
+datasets.
+
+```{r, legacy}
+x<-getDEE2_legacy("celegans",SRRvec)
+names(x)
+head(x$GeneCounts)
+head(x$TxCounts)
+head(x$QcMx)
+head(x$GeneInfo)
+head(x$TxInfo)
+```
 
 ## Session Info
 ```{r,sessioninfo,message=FALSE}

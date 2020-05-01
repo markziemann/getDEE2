@@ -269,7 +269,7 @@ loadFullMeta<-function(zipname){
 #' @importFrom stats aggregate
 #' @export
 #' @examples
-#' x<-getDEE2_legacy("celegans",c("SRR3657716","SRR3657717"))
+#' x<-getDEE2_legacy("scerevisiae",c("SRR1755149","SRR1755150"))
 #' x<-Tx2Gene(x)
 Tx2Gene<-function(x){
     y<-merge(x$TxInfo,x$TxCounts,by=0)

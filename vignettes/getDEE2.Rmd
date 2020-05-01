@@ -154,6 +154,44 @@ head(x$GeneInfo)
 head(x$TxInfo)
 ```
 
+## Dealing with large projects
+
+The DEE2 webpage has processed many projects containing dozens to thousands of
+runs at the [link](http://dee2.io/huge). We have created some functions to
+enable programmatic access to these data as well.
+
+The three functions are
+
+1. `list_bundles` downloads a list of available bundles for a species
+
+2. `query_bundles` checks whether a particular SRA project or GEO series
+accession number is available
+
+3. `getDEE2_bundle` fetches the expression data for a particular accession
+and loads it as a SummarizedExperiment object 
+
+In this first example we are looking to obtain a dataset with SRA project 
+accession number SRP058781 and load the gene level counts
+
+```{r,bundle1}
+bundles <- list_bundles("athaliana")
+head(bundles)
+query_bundles(species="athaliana",query="SRP058781",
+    col="SRP_accession",bundles=bundles)
+x <- getDEE2_bundle("athaliana", "SRP058781",
+    col="SRP_accession",counts="GeneCounts")
+    assays(x)$counts[1:6,1:4]
+```
+
+Similarly, it is possible to search with GEO series numbers, as in the next
+example. 
+
+```{r,bundle2}
+x <- getDEE2_bundle("drerio", "GSE106677",
+    col="GSE_accession",counts="Tx2Gene")
+    assays(x)$counts[1:6,1:4]
+```
+
 ## Session Info
 ```{r,sessioninfo,message=FALSE}
 sessionInfo()

@@ -100,7 +100,8 @@ queryDee2<-function(species, SRRvec,metadata=NULL, ...) {
 #' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y<-loadGeneCounts("mydata.zip")
 loadGeneCounts<-function(zipname){
-    CM="GeneCountMatrix.tsv"
+    FILELIST <- unzip(zipname,list=TRUE)$Name
+    CM=FILELIST[grep("GeneCountMatrix.tsv",FILELIST)]
     TF=tempfile()
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
@@ -123,7 +124,8 @@ loadGeneCounts<-function(zipname){
 #' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y<-loadTxCounts("mydata.zip")
 loadTxCounts<-function(zipname){
-    CM="TxCountMatrix.tsv"
+    FILELIST <- unzip(zipname,list=TRUE)$Name
+    CM=FILELIST[grep("TxCountMatrix.tsv",FILELIST)]
     TF=tempfile()
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
@@ -146,7 +148,8 @@ loadTxCounts<-function(zipname){
 #' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y<-loadGeneInfo("mydata.zip")
 loadGeneInfo<-function(zipname){
-    CM="GeneInfo.tsv"
+    FILELIST <- unzip(zipname,list=TRUE)$Name
+    CM=FILELIST[grep("GeneInfo.tsv",FILELIST)]
     TF=tempfile()
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
@@ -170,7 +173,8 @@ loadGeneInfo<-function(zipname){
 #' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y<-loadTxInfo("mydata.zip")
 loadTxInfo<-function(zipname){
-    CM="TxInfo.tsv"
+    FILELIST <- unzip(zipname,list=TRUE)$Name
+    CM=FILELIST[grep("TxInfo.tsv",FILELIST)]
     TF=tempfile()
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
@@ -194,7 +198,8 @@ loadTxInfo<-function(zipname){
 #' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y<-loadQcMx("mydata.zip")
 loadQcMx<-function(zipname){
-    CM="QC_Matrix.tsv"
+    FILELIST <- unzip(zipname,list=TRUE)$Name
+    CM=FILELIST[grep("QC_Matrix.tsv",FILELIST)]
     TF=tempfile()
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
@@ -219,7 +224,8 @@ loadQcMx<-function(zipname){
 #' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y<-loadQcMx("mydata.zip")
 loadSummaryMeta<-function(zipname){
-    CM="MetadataSummary.tsv"
+    FILELIST <- unzip(zipname,list=TRUE)$Name
+    CM=FILELIST[grep("MetadataSummary.tsv",FILELIST)]
     TF=tempfile()
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
@@ -241,7 +247,8 @@ loadSummaryMeta<-function(zipname){
 #' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y<-loadQcMx("mydata.zip")
 loadFullMeta<-function(zipname){
-    CM="MetadataFull.tsv"
+    FILELIST <- unzip(zipname,list=TRUE)$Name
+    CM=FILELIST[grep("MetadataFull.tsv",FILELIST)]
     TF=tempfile()
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
@@ -303,41 +310,40 @@ baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
     absent<-dat1$absent
     present<-dat1$present
     if ( length(present) < 1 ) {
-        message("Error. None of the specified SRR accessions are present.")
+        stop("Error. None of the specified SRR accessions are present.")
+    } 
+    SRRvec<-gsub(" ","",present)
+    llist<-paste0("&x=",paste(SRRvec,collapse = "&x="))
+    murl <- paste0(baseURL,"org=",species, llist)
+    if(is.null(outfile)){
+        zipname=tempfile()
     } else {
-        SRRvec<-gsub(" ","",present)
-        llist<-paste0("&x=",paste(SRRvec,collapse = "&x="))
-        murl <- paste0(baseURL,"org=",species, llist)
-        if(is.null(outfile)){
-            zipname=tempfile()
-        } else {
-            zipname=outfile
-            if(!grepl(".zip$",zipname)){
-                zipname=paste0(zipname,".zip")
-            }
+        zipname=outfile
+        if(!grepl(".zip$",zipname)){
+            zipname=paste0(zipname,".zip")
         }
-        download.file(murl, destfile=zipname, mode = "wb", ...)
-        GeneCounts<-loadGeneCounts(zipname)
-        TxCounts<-loadTxCounts(zipname)
-        GeneInfo<-loadGeneInfo(zipname)
-        TxInfo<-loadTxInfo(zipname)
-        QcMx<-loadQcMx(zipname)
-        MetadataSummary<-loadSummaryMeta(zipname)
-        MetadataFull<-loadFullMeta(zipname)
-        dat <- list("GeneCounts" = GeneCounts, "TxCounts" = TxCounts,
-        "GeneInfo" = GeneInfo,"TxInfo" = TxInfo , "QcMx" = QcMx, 
-        "MetadataSummary" = MetadataSummary , "MetadataFull" = MetadataFull ,
-        "absent" = absent)
-
-        if(is.null(outfile)){
-            unlink(zipname)
-        }
-        if(length(absent)>0){
-            message(paste0("Warning, datasets not found: '",
-            paste(absent,collapse=","),"'"))
-        }
-        return(dat)
     }
+    download.file(murl, destfile=zipname, mode = "wb", ...)
+    GeneCounts<-loadGeneCounts(zipname)
+    TxCounts<-loadTxCounts(zipname)
+    GeneInfo<-loadGeneInfo(zipname)
+    TxInfo<-loadTxInfo(zipname)
+    QcMx<-loadQcMx(zipname)
+    MetadataSummary<-loadSummaryMeta(zipname)
+    MetadataFull<-loadFullMeta(zipname)
+    dat <- list("GeneCounts" = GeneCounts, "TxCounts" = TxCounts,
+    "GeneInfo" = GeneInfo,"TxInfo" = TxInfo , "QcMx" = QcMx, 
+    "MetadataSummary" = MetadataSummary , "MetadataFull" = MetadataFull ,
+    "absent" = absent)
+
+    if(is.null(outfile)){
+        unlink(zipname)
+    }
+    if(length(absent)>0){
+        message(paste0("Warning, datasets not found: '",
+        paste(absent,collapse=","),"'"))
+    }
+    return(dat)
 }
 
 #' Create summarizedExperiment object

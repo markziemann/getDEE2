@@ -25,13 +25,10 @@ test_that("cel works", {
 
 # M. musculus
 x<-getDEE2_legacy("mmusculus",c("SRR1022283","SRR1022284"))
-x<-Tx2Gene(x)
 
 test_that("mmu works", {
     expect_equal( sum(x$GeneCounts) , 14378076 )
     expect_equal( sum(x$TxCounts) , 2872578 )
-    expect_equal( sum(x$Tx2Gene) , 2872578 )
-    expect_equal( nrow(x$Tx2Gene) , 34839 )
 })
 
 

@@ -1,3 +1,9 @@
+CHANGES IN VERSION 0.99.16
+------------------------
+   o New function getDEE2_bundle to fetch entire project data from 
+   http://dee2.io/huge/
+
+
 CHANGES IN VERSION 0.99.9
 ------------------------
    o New function se() which constructs SummarizedExperiment object

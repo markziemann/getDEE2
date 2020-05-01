@@ -420,7 +420,7 @@ getDEE2<-function(species, SRRvec, counts="GeneCounts", metadata=NULL,
         llist<-paste0("&x=",paste(SRRvec,collapse = "&x="))
         murl <- paste0(baseURL,"org=",species, llist)
         if(is.null(outfile)){
-            zipname=tempfile()
+            zipname = paste(tempfile(),".zip",sep="")
         } else {
             zipname=outfile
             if(!grepl(".zip$",zipname)){
@@ -450,5 +450,148 @@ getDEE2<-function(species, SRRvec, counts="GeneCounts", metadata=NULL,
         dat2<-se(dat,counts=counts)
         return(dat2)
     }
+}
+
+
+#' Get a table of all completed projects at DEE2
+#'
+#' This function fetches a table listing all completed projects that
+#' are available at DEE2
+#' @param species A character string matching a species of interest.
+#' @return a table of project bundles available at DEE2.io/huge
+#' @keywords metadata
+#' @import utils
+#' @import htm2txt
+#' @export
+#' @examples
+#' bundles <- list_bundles("celegans")
+list_bundles <- function(species){
+    orgs=c("athaliana","celegans","dmelanogaster","drerio","ecoli","hsapiens",
+    "mmusculus","rnorvegicus","scerevisiae")
+    if (species %in% orgs == FALSE ) {
+        message(paste("Provided species '",species,"' is not found in the list.
+        Check spelling and try again" ,sep=""))
+        message(paste("Valid choices are'",paste(orgs,collapse = "', '"),"'."))
+    } else {
+        URLBASE=paste("http://dee2.io/huge/",species,"/",sep="")
+        BUNDLES_FILE=tempfile()
+        download.file(URLBASE,destfile=BUNDLES_FILE)
+        bundles <- htm2txt(readLines(BUNDLES_FILE))
+        unlink(BUNDLES_FILE)
+        bundles <- bundles[grep("RP",bundles)]
+        bundles <- t(data.frame(sapply(bundles,function(x) { strsplit(x," ")  })))
+        bundles <- as.data.frame(bundles,stringsAsFactors=FALSE)
+        rownames(bundles) <- seq(bundles[,1])
+        bundles$SRP <- sapply(strsplit(bundles[,1],"_"),"[[",1)
+        bundles$GSE <- sapply(strsplit(bundles[,1],"_"),"[[",2)
+        bundles$GSE <- gsub(".zip","",bundles$GSE)
+        colnames(bundles) <- c("file_name","date_added","time_added",
+            "file_size","SRP_accession","GSE_accession")
+        attributes(bundles)$species <- species
+        return(bundles)
+    }
+}
+
+
+#' Query whether a project bundle is available from DEE2
+#'
+#' This function sends a query to check whether a dataset is available or not.
+#' @param species A character string matching a species of interest.
+#' @param query A character string, such as  the SRA project accession number
+#' or the GEO series accession number
+#' @param col the column name to be queried, usually "SRP_accession" for SRA
+#' project accession or "GSE_accession" for GEO series accession.
+#' @param bundles optional table of previously downloaded bundles.
+#' @return a list of datasets that are present and absent.
+#' @keywords query
+#' @export
+#' @examples
+#' query_bundles("celegans", c("SRP133403","SRP133439"), col = "SRP_accession")
+query_bundles <- function(species,query,col,bundles=NULL){
+    cols <- c("file_name","date_added","time_added","file_size",
+        "SRP_accession","GSE_accession")
+    if (col %in% cols == FALSE ) {
+        message(paste("Provided column '",col,"' is not found in the list.
+        Check spelling and try again" ,sep=""))
+        message(paste("Valid choices are'",paste(cols,collapse = "', '"),"'."))
+    } else {
+        if(is.null(bundles)){
+            bundles<- list_bundles(species)
+        }
+        present <- query[which(query %in% bundles[,col])]
+        absent <- query[-which(query %in% bundles[,col])]
+        res <- bundles[which(bundles[,col] %in% query),]
+        dat <- list("present" = present, "absent" = absent)
+        return(dat)
+    }
+}
+
+
+#' Get a DEE2 project bundle
+#'
+#' The getDEE2_bundle function fetches gene expression data from DEE2.
+#' This function will only work if all SRA runs have been successfully 
+#' processed for an SRA project. This function returns a 
+#' SummarizedExperiment object.
+#' @param species A character string matching the species of interest.   
+#' @param query A character string, such as  the SRA project accession number
+#' or the GEO series accession number
+#' @param col the column name to be queried, usually "SRP_accession" for SRA
+#' project accession or "GSE_accession" for GEO series accession.
+#' @param counts A string, either 'GeneCounts', 'TxCounts' or 'Tx2Gene'.
+#' When 'GeneCounts' is specified, STAR gene level counts are returned.
+#' When 'TxCounts' is specified, kallisto transcript counts are returned.
+#' When 'Tx2Gene' is specified, kallisto counts aggregated (by sum) on gene
+#' are returned. If left blank, "GeneCounts" will be fetched.
+#' @param bundles optional table of previously downloaded bundles.
+#' providing this will speed up performance if multiple queries are made in a
+#' session. If left blank, the bundle list will be fetched again.
+#' @param baseURL The base URL of the service. Leave this as the default URL
+#' unless you want to download from a 3rd party mirror.
+#' @param ... Additional parameters to be passed to download.file.
+#' @keywords DEE2 RNA-seq database
+#' @return a SummarizedExperiment object.
+#' @import utils
+#' @import SummarizedExperiment 
+#' @export
+#' @examples
+#' x <- getDEE2_bundle("celegans", "SRP133403",col="SRP_accession")
+getDEE2_bundle <- function(species, query, col, counts="GeneCounts", 
+bundles=NULL, baseURL="http://dee2.io/huge/", ...){
+    if(is.null(bundles)){
+        bundles <- list_bundles(species)
+    }
+    dat1<-query_bundles(species, query, col, bundles=bundles)
+    absent<-dat1$absent
+    present<-dat1$present
+    if ( length(present) < 1 ) {
+        stop("Error. None of the specified accessions are present.")
+    }
+    if ( length(query) > 1 ) {
+        stop("Only one query dataset at a time")
+    }
+    zipname = paste(tempfile(),".zip",sep="")
+    fname = bundles[which(bundles[,col] %in% query),1]
+    murl = paste(baseURL,species,"/",fname,sep="")
+    download.file(murl, destfile = zipname, mode = "wb", ...)
+    GeneCounts <- loadGeneCounts(zipname)
+    TxCounts <- loadTxCounts(zipname)
+    GeneInfo <- loadGeneInfo(zipname)
+    TxInfo <- loadTxInfo(zipname)
+    QcMx <- loadQcMx(zipname)
+    MetadataSummary <- loadSummaryMeta(zipname)
+    MetadataFull <- loadFullMeta(zipname)
+    dat <- list("GeneCounts" = GeneCounts, "TxCounts" = TxCounts,
+    "GeneInfo" = GeneInfo,"TxInfo" = TxInfo , "QcMx" = QcMx,
+    "MetadataSummary" = MetadataSummary , "MetadataFull" = MetadataFull ,
+    "absent" = absent)
+    unlink(zipname)
+    if(length(absent)>0){
+        message(paste0("Warning, datasets not found: '",
+        paste(absent,collapse=","),"'"))
+    }
+    if(is.null(counts)) { counts="GeneCounts" }
+    dat2<-se(dat,counts=counts)
+    return(dat2)
 }
 

@@ -5,12 +5,12 @@
 \title{Get DEE2 Gene Expression Data (Legacy)}
 \usage{
 getDEE2_legacy(
-    species,
-    SRRvec,
-    outfile = NULL,
-    metadata = NULL,
-    baseURL = "http://dee2.io/cgi-bin/request.sh?",
-    ...
+  species,
+  SRRvec,
+  outfile = NULL,
+  metadata = NULL,
+  baseURL = "http://dee2.io/cgi-bin/request.sh?",
+  ...
 )
 }
 \arguments{

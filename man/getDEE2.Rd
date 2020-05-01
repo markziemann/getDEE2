@@ -6,13 +6,13 @@
 \title{getDEE2: Programmatic access to the DEE2 RNA expression dataset}
 \usage{
 getDEE2(
-    species,
-    SRRvec,
-    counts = "GeneCounts",
-    metadata = NULL,
-    outfile = NULL,
-    baseURL = "http://dee2.io/cgi-bin/request.sh?",
-    ...
+  species,
+  SRRvec,
+  counts = "GeneCounts",
+  metadata = NULL,
+  outfile = NULL,
+  baseURL = "http://dee2.io/cgi-bin/request.sh?",
+  ...
 )
 }
 \arguments{

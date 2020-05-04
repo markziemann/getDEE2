@@ -1,6 +1,6 @@
 Package: getDEE2
 Title: Programmatic access to the DEE2 RNA expression dataset
-Version: 0.99.20
+Version: 0.99.21
 Authors@R: person(given="Mark",
     family="Ziemann",
     email = "mark.ziemann@gmail.com",
@@ -8,7 +8,7 @@ Authors@R: person(given="Mark",
 Description: Digital Expression Explorer 2 (or DEE2 for short) is a repository
     of processed RNA-seq data in the form of counts. It was designed so that
     researchers could undertake re-analysis and meta-analysis of published
-    RNA-seq studies quickly and easily. As of April 2020, nearly 1 million
+    RNA-seq studies quickly and easily. As of April 2020, over 1 million
     SRA datasets have been processed. This package provides an R interface
     to access these expression data. More information about the DEE2 project
     can be found at the project homepage (http://dee2.io) and main publication

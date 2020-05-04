@@ -16,8 +16,7 @@ vignette: >
 Digital Expression Explorer 2 (or DEE2 for short) is a repository of processed
 RNA-seq data in the form of counts. It was designed so that researchers could
 undertake re-analysis and meta-analysis of published RNA-seq studies quickly 
-and easily. As of April 2020, nearly 1 million SRA datasets have been
-processed.
+and easily. As of April 2020, over 1 million SRA runs have been processed.
 
 For further information about the resource, refer to the
 [journal article](https://doi.org/10.1093/gigascience/giz022) and
@@ -86,8 +85,9 @@ The general syntax for obtaining DEE2 data is this:
 First, the function queries the metadata to make sure that the requested
 datasets are present. If metadata is not specified, then it will download
 a 'fresh' copy of the metadata. It then fetches the requested expression
-data and constructs a `SummarizedExperiment` object. The 'counts' parameter
-controls the type of counts provided:
+data and constructs a 
+[SummarizedExperiment object](http://bioconductor.org/packages/SummarizedExperiment).
+The 'counts' parameter controls the type of counts provided:
 
 * `GeneCounts` STAR gene level counts (this is the default)
 
@@ -105,7 +105,7 @@ Here is an example of using the SRR vector as defined above.
 
 ```{r, example1}
 suppressPackageStartupMessages(library("SummarizedExperiment"))
-x<-getDEE2("celegans",SRRvec,metadata=mdat)
+x<-getDEE2("celegans",SRRvec,metadata=mdat,counts="GeneCounts")
 x
 # show sample level metadata
 colData(x)[1:7]
@@ -119,7 +119,7 @@ there will be a warning message.
 
 ```{r, testabsent}
 x<-getDEE2("celegans",c("SRR363798","SRR363799","SRR3581689","SRR3581692"),
-    metadata=mdat)
+    metadata=mdat,counts="GeneCounts")
 ```
 
 In this case the accessions SRR3581689 and SRR3581692 are *A. thaliana*
@@ -145,7 +145,7 @@ control data, sample metadata summary, sample metadata (full) and any absent
 datasets.
 
 ```{r, legacy}
-x<-getDEE2_legacy("celegans",SRRvec)
+x<-getDEE2_legacy("celegans",SRRvec,metadata=mdat)
 names(x)
 head(x$GeneCounts)
 head(x$TxCounts)
@@ -168,7 +168,7 @@ The three functions are
 accession number is available
 
 3. `getDEE2_bundle` fetches the expression data for a particular accession
-and loads it as a SummarizedExperiment object 
+and loads it as a SummarizedExperiment object
 
 In this first example we are looking to obtain a dataset with SRA project 
 accession number SRP058781 and load the gene level counts
@@ -188,7 +188,7 @@ example.
 
 ```{r,bundle2}
 x <- getDEE2_bundle("drerio", "GSE106677",
-    col="GSE_accession",counts="Tx2Gene")
+    col="GSE_accession",counts="GeneCounts")
     assays(x)$counts[1:6,1:4]
 ```
 

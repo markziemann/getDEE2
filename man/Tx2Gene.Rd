@@ -18,7 +18,7 @@ gene-level estimates. Counts for each transcript are summed to get an
 aggregated gene level score.
 }
 \examples{
-x<-getDEE2_legacy("celegans",c("SRR3657716","SRR3657717"))
+x<-getDEE2_legacy("scerevisiae",c("SRR1755149","SRR1755150"))
 x<-Tx2Gene(x)
 }
 \keyword{Aggregate}

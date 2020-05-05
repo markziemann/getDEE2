@@ -1,6 +1,6 @@
 ---
 title: "getDEE2: Programmatic access to the DEE2 RNA expression dataset"
-author: "Mark Ziemann"
+author: "Mark Ziemann & Antony Kaspi"
 date: "`r Sys.Date()`"
 output: 
     rmarkdown::html_vignette:

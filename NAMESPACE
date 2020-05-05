@@ -3,7 +3,6 @@
 export(Tx2Gene)
 export(getDEE2)
 export(getDEE2_bundle)
-export(getDEE2_legacy)
 export(getDee2Metadata)
 export(list_bundles)
 export(loadFullMeta)

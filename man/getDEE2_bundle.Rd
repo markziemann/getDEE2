@@ -10,6 +10,7 @@ getDEE2_bundle(
   col,
   counts = "GeneCounts",
   bundles = NULL,
+  legacy = FALSE,
   baseURL = "http://dee2.io/huge/",
   ...
 )
@@ -32,6 +33,10 @@ are returned. If left blank, "GeneCounts" will be fetched.}
 \item{bundles}{optional table of previously downloaded bundles.
 providing this will speed up performance if multiple queries are made in a
 session. If left blank, the bundle list will be fetched again.}
+
+\item{legacy}{Whether data should be returned in the legacy (list) format.
+Default is FALSE. Leave this FALSE if you want to receive data as
+Summarized experiment.}
 
 \item{baseURL}{The base URL of the service. Leave this as the default URL
 unless you want to download from a 3rd party mirror.}

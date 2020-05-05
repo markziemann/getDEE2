@@ -138,14 +138,14 @@ objects.
 
 ## Legacy function
 
-The function getDEE2 is provided for completeness but is no longer
-recommended. It gives DEE2 data in the form of a list object with slots
-for gene counts, transcript counts, gene length, transcript length, quality
-control data, sample metadata summary, sample metadata (full) and any absent
-datasets.
+The function to obtain DEE2 in the legacy format is provided for completeness 
+but is no longer recommended. It gives DEE2 data in the form of a list object
+with slots for gene counts, transcript counts, gene length, transcript length,
+quality control data, sample metadata summary, sample metadata (full) and any
+absent datasets.
 
 ```{r, legacy}
-x<-getDEE2_legacy("celegans",SRRvec,metadata=mdat)
+x<-getDEE2("celegans",SRRvec,metadata=mdat,legacy=TRUE)
 names(x)
 head(x$GeneCounts)
 head(x$TxCounts)

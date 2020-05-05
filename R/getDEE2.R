@@ -269,7 +269,7 @@ loadFullMeta<-function(zipname){
 #' @importFrom stats aggregate
 #' @export
 #' @examples
-#' x<-getDEE2_legacy("scerevisiae",c("SRR1755149","SRR1755150"))
+#' x<-getDEE2("scerevisiae",c("SRR1755149","SRR1755150"),legacy=TRUE)
 #' x<-Tx2Gene(x)
 Tx2Gene<-function(x){
     y<-merge(x$TxInfo,x$TxCounts,by=0)
@@ -281,74 +281,11 @@ Tx2Gene<-function(x){
     x<-c(list("Tx2Gene"=yy),x)
 }
 
-#' Get DEE2 Gene Expression Data (Legacy)
-#'
-#' This function fetches gene expression data from the DEE2 database of RNA
-#' sequencing data and returns it as a getDEE2 object.
-#' @param species A character string matching the species of interest.   
-#' @param SRRvec A character string or vector of SRA run accession numbers.
-#' @param outfile An optional file name for the downloaded dataset.
-#' @param metadata (Optional) name of R object for the meta data. Providing
-#' the metadata will speed up performance if multiple queries are made in a
-#' session.
-#' @param baseURL The base URL of the service. Leave this as the default URL
-#' unless you want to download from a 3rd party mirror.
-#' @param ... Additional parameters to be passed to download.file.
-#' @keywords DEE2 RNA-seq database
-#' @return a getDEE2 object.
-#' @import utils
-#' @export
-#' @examples
-#' x<-getDEE2_legacy("ecoli",c("SRR1613487","SRR1613488"))
-getDEE2_legacy<-function(species, SRRvec, outfile=NULL, metadata=NULL,
-baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
-    if(is.null(metadata)){
-        dat1<-queryDee2(species, SRRvec)
-    } else {
-        dat1<-queryDee2(species, SRRvec,metadata=metadata)
-    }
-    absent<-dat1$absent
-    present<-dat1$present
-    if ( length(present) < 1 ) {
-        stop("Error. None of the specified SRR accessions are present.")
-    } 
-    SRRvec<-gsub(" ","",present)
-    llist<-paste0("&x=",paste(SRRvec,collapse = "&x="))
-    murl <- paste0(baseURL,"org=",species, llist)
-    if(is.null(outfile)){
-        zipname=tempfile()
-    } else {
-        zipname=outfile
-        if(!grepl(".zip$",zipname)){
-            zipname=paste0(zipname,".zip")
-        }
-    }
-    download.file(murl, destfile=zipname, mode = "wb", ...)
-    GeneCounts<-loadGeneCounts(zipname)
-    TxCounts<-loadTxCounts(zipname)
-    GeneInfo<-loadGeneInfo(zipname)
-    TxInfo<-loadTxInfo(zipname)
-    QcMx<-loadQcMx(zipname)
-    MetadataSummary<-loadSummaryMeta(zipname)
-    MetadataFull<-loadFullMeta(zipname)
-    dat <- list("GeneCounts" = GeneCounts, "TxCounts" = TxCounts,
-    "GeneInfo" = GeneInfo,"TxInfo" = TxInfo , "QcMx" = QcMx, 
-    "MetadataSummary" = MetadataSummary , "MetadataFull" = MetadataFull ,
-    "absent" = absent)
-
-    if(is.null(outfile)){
-        unlink(zipname)
-    }
-    if(length(absent)>0){
-        message(paste0("Warning, datasets not found: '",
-        paste(absent,collapse=","),"'"))
-    }
-    return(dat)
-}
 
 #' Create summarizedExperiment object
 #'
-#' This function creates a SummarizedExperiment object from a getDEE2 dataset
+#' This function creates a SummarizedExperiment object from a legacy getDEE2
+#' dataset
 #' @param x a getDEE2 object.
 #' @param counts select "GeneCounts" for STAR based gene counts, "TxCounts" for
 #' kallisto transcript level counts or "Tx2Gene" for transcript counts
@@ -358,7 +295,7 @@ baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
 #' @import SummarizedExperiment 
 #' @export
 #' @examples
-#' x<-getDEE2_legacy("ecoli",c("SRR1613487","SRR1613488"))
+#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),legacy=TRUE)
 #' y<-se(x)
 se<-function(x,counts="GeneCounts"){
     if ( (counts == "GeneCounts" ) | is.null(counts) ) {
@@ -394,6 +331,9 @@ se<-function(x,counts="GeneCounts"){
 #' @param metadata (Optional) name of R object for the meta data. Providing
 #' the metadata will speed up performance if multiple queries are made in a
 #' session. If left blank, the metadata will be fetched once again.
+#' @param legacy Whether data should be returned in the legacy (list) format.
+#' Default is FALSE. Leave this FALSE if you want to receive data as
+#' Summarized experiment.
 #' @param baseURL The base URL of the service. Leave this as the default URL
 #' unless you want to download from a 3rd party mirror.
 #' @param ... Additional parameters to be passed to download.file.
@@ -405,7 +345,8 @@ se<-function(x,counts="GeneCounts"){
 #' @examples
 #' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"))
 getDEE2<-function(species, SRRvec, counts="GeneCounts", metadata=NULL,
-    outfile=NULL, baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
+    outfile=NULL, legacy=FALSE,
+    baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
     if(is.null(metadata)){
         dat1<-queryDee2(species, SRRvec)
     } else {
@@ -446,9 +387,15 @@ getDEE2<-function(species, SRRvec, counts="GeneCounts", metadata=NULL,
             message(paste0("Warning, datasets not found: '",
             paste(absent,collapse=","),"'"))
         }
-        if(is.null(counts)) { counts="GeneCounts" }
-        dat2<-se(dat,counts=counts)
-        return(dat2)
+        if(legacy == FALSE) {
+            if(is.null(counts)) { counts="GeneCounts" }
+            dat2<-se(dat,counts=counts)
+            return(dat2)
+        }
+
+        if(legacy == TRUE) {
+            return(dat)
+        }
     }
 }
 
@@ -547,6 +494,9 @@ query_bundles <- function(species,query,col,bundles=NULL){
 #' @param bundles optional table of previously downloaded bundles.
 #' providing this will speed up performance if multiple queries are made in a
 #' session. If left blank, the bundle list will be fetched again.
+#' @param legacy Whether data should be returned in the legacy (list) format.
+#' Default is FALSE. Leave this FALSE if you want to receive data as
+#' Summarized experiment.
 #' @param baseURL The base URL of the service. Leave this as the default URL
 #' unless you want to download from a 3rd party mirror.
 #' @param ... Additional parameters to be passed to download.file.
@@ -558,7 +508,7 @@ query_bundles <- function(species,query,col,bundles=NULL){
 #' @examples
 #' x <- getDEE2_bundle("celegans", "SRP133403",col="SRP_accession")
 getDEE2_bundle <- function(species, query, col, counts="GeneCounts", 
-bundles=NULL, baseURL="http://dee2.io/huge/", ...){
+    bundles=NULL, legacy=FALSE, baseURL="http://dee2.io/huge/", ...){
     if(is.null(bundles)){
         bundles <- list_bundles(species)
     }
@@ -591,8 +541,13 @@ bundles=NULL, baseURL="http://dee2.io/huge/", ...){
         message(paste0("Warning, datasets not found: '",
         paste(absent,collapse=","),"'"))
     }
-    if(is.null(counts)) { counts="GeneCounts" }
-    dat2<-se(dat,counts=counts)
-    return(dat2)
+    if(legacy == FALSE) {
+        if(is.null(counts)) { counts="GeneCounts" }
+        dat2<-se(dat,counts=counts)
+        return(dat2)
+    }
+    if(legacy == TRUE) {
+        return(dat)
+    }
 }
 

@@ -11,6 +11,7 @@ getDEE2(
   counts = "GeneCounts",
   metadata = NULL,
   outfile = NULL,
+  legacy = FALSE,
   baseURL = "http://dee2.io/cgi-bin/request.sh?",
   ...
 )
@@ -31,6 +32,10 @@ the metadata will speed up performance if multiple queries are made in a
 session. If left blank, the metadata will be fetched once again.}
 
 \item{outfile}{An optional file name for the downloaded dataset.}
+
+\item{legacy}{Whether data should be returned in the legacy (list) format.
+Default is FALSE. Leave this FALSE if you want to receive data as
+Summarized experiment.}
 
 \item{baseURL}{The base URL of the service. Leave this as the default URL
 unless you want to download from a 3rd party mirror.}

@@ -17,10 +17,11 @@ aggregated to gene level. Default is "GeneCounts"}
 a SummarizedExperiment object
 }
 \description{
-This function creates a SummarizedExperiment object from a getDEE2 dataset
+This function creates a SummarizedExperiment object from a legacy getDEE2
+dataset
 }
 \examples{
-x<-getDEE2_legacy("ecoli",c("SRR1613487","SRR1613488"))
+x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),legacy=TRUE)
 y<-se(x)
 }
 \keyword{SummarizedExperiment}

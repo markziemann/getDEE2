@@ -3,7 +3,7 @@ library("SummarizedExperiment")
 library("testthat")
 
 # E. coli 
-x<-getDEE2_legacy("ecoli",c("SRR1613487","SRR1613488"))
+x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),legacy=TRUE)
 
 test_that("eco works", {
     expect_equal( sum(x$GeneCounts) , 20624168 )

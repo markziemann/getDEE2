@@ -131,7 +131,7 @@ DEE2 data are perfectly suitable for downstream analysis with
 [edgeR](https://bioconductor.org/packages/edgeR/), 
 [DESeq2](https://bioconductor.org/packages/DESeq2/),
 and many other gene expression and pathway enrichment tools.
-For more information wbout working with SummarizedExperiment refer to the
+For more information about working with SummarizedExperiment refer to the
 [rnaseqGene package](https://bioconductor.org/packages/rnaseqGene/) which
 describes a workflow for differential gene expression of SummarizedExperiment
 objects.
@@ -154,13 +154,12 @@ head(x$GeneInfo)
 head(x$TxInfo)
 ```
 
-## Dealing with large projects
+## Large project bundles
 
 The DEE2 webpage has processed many projects containing dozens to thousands of
-runs at the [link](http://dee2.io/huge). We have created some functions to
-enable programmatic access to these data as well.
-
-The three functions are
+runs ([available here](http://dee2.io/huge)). These large project datasets are
+easiest to access with the "bundles" functionality described here. The three 
+functions are:
 
 1. `list_bundles` downloads a list of available bundles for a species
 
@@ -170,8 +169,8 @@ accession number is available
 3. `getDEE2_bundle` fetches the expression data for a particular accession
 and loads it as a SummarizedExperiment object
 
-In this first example we are looking to obtain a dataset with SRA project 
-accession number SRP058781 and load the gene level counts
+In this first example, we search for a dataset with SRA project 
+accession number SRP058781 and load the gene level counts.
 
 ```{r,bundle1}
 bundles <- list_bundles("athaliana")

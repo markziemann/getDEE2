@@ -106,7 +106,7 @@ loadGeneCounts<-function(zipname){
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
     file.rename(mxname,TF)
-    dat <- read.table(TF,row.names=1,header=TRUE)
+    dat <- read.table(TF,row.names=1,header=TRUE,stringsAsFactors=FALSE)
     unlink(TF)
     return(dat)
 }
@@ -130,7 +130,7 @@ loadTxCounts<-function(zipname){
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
     file.rename(mxname,TF)
-    dat <- read.table(TF,row.names=1,header=TRUE)
+    dat <- read.table(TF,row.names=1,header=TRUE,stringsAsFactors=FALSE)
     unlink(TF)
     return(dat)
 }
@@ -154,7 +154,7 @@ loadGeneInfo<-function(zipname){
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
     file.rename(mxname,TF)
-    dat <- read.table(TF,row.names=1,header=TRUE)
+    dat <- read.table(TF,row.names=1,header=TRUE,stringsAsFactors=FALSE)
     unlink(TF)
     return(dat)
 }
@@ -179,7 +179,7 @@ loadTxInfo<-function(zipname){
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
     file.rename(mxname,TF)
-    dat <- read.table(TF,row.names=1,header=TRUE)
+    dat <- read.table(TF,row.names=1,header=TRUE,stringsAsFactors=FALSE)
     unlink(TF)
     return(dat)
 }
@@ -204,7 +204,8 @@ loadQcMx<-function(zipname){
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
     file.rename(mxname,TF)
-    dat <- read.table(TF,row.names=1,header=TRUE,fill=TRUE)
+    dat <- read.table(TF,row.names=1,header=TRUE,fill=TRUE,
+        stringsAsFactors=FALSE)
     unlink(TF)
     message("For more information about DEE2 QC metrics, visit
     https://github.com/markziemann/dee2/blob/master/qc/qc_metrics.md")
@@ -230,7 +231,8 @@ loadSummaryMeta<-function(zipname){
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
     file.rename(mxname,TF)
-    dat <- read.table(TF,row.names=1,header=TRUE,quote="",sep='\t',fill=FALSE)
+    dat <- read.table(TF,row.names=1,header=TRUE,quote="",sep='\t',
+        fill=FALSE,stringsAsFactors=FALSE)
     unlink(TF)
     return(dat)
 }
@@ -253,7 +255,8 @@ loadFullMeta<-function(zipname){
     unzip(zipname, files = CM, exdir = tempdir() )
     mxname<-paste0(tempdir(),"/",CM)
     file.rename(mxname,TF)
-    dat <- read.table(TF,row.names=1,header=TRUE,quote="",fill=TRUE,sep='\t')
+    dat <- read.table(TF,row.names=1,header=TRUE,quote="",fill=TRUE,
+        sep='\t',stringsAsFactors=FALSE)
     unlink(TF)
     return(dat)
 }

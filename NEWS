@@ -1,5 +1,13 @@
 CHANGES IN VERSION 0.99.16
 ------------------------
+   o Functions `getDee2Metadata` and `queryDee2` are now called 
+   `getDee2Metadata` and `queryDEE2` respectively to be consistent
+   with the other functions.
+   o Fixed a bug with some samples that have a # in the name. 
+   Thanks to @uilnauyis for the suggestion.
+
+CHANGES IN VERSION 0.99.16
+------------------------
    o New function getDEE2_bundle to fetch entire project data from 
    http://dee2.io/huge/
 

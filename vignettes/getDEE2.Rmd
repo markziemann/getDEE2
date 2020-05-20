@@ -40,7 +40,7 @@ library("getDEE2")
 ## Searching for datasets of interest starting with accession numbers
 
 The first step is to download the list of accession numbers of available
-datasets with the `getDee2Metadata` function, specifying a species name.
+datasets with the `getDEE2Metadata` function, specifying a species name.
 options for species currently are:
 
 * athaliana
@@ -56,7 +56,7 @@ options for species currently are:
 If the species name is incorrect, an error will be thrown.
 
 ```{r, getmeta}
-mdat<-getDee2Metadata("celegans")
+mdat<-getDEE2Metadata("celegans")
 head(mdat)
 ```
 

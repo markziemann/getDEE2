@@ -13,7 +13,7 @@
 #' @examples
 #' # Example workflow
 #' # Fetch metadata
-#' mdat<-getDee2Metadata("celegans")
+#' mdat<-getDEE2Metadata("celegans")
 #' # filter metadata for SRA project SRP009256
 #' mdat1<-mdat[which(mdat$SRP_accession %in% "SRP009256"),]
 #' # create a vector of SRA run accessions to fetch
@@ -34,8 +34,8 @@ NULL
 #' @import utils
 #' @export
 #' @examples
-#' ecoli_metadata<-getDee2Metadata("ecoli")
-getDee2Metadata<-function(species,outfile=NULL, ...){
+#' ecoli_metadata<-getDEE2Metadata("ecoli")
+getDEE2Metadata<-function(species,outfile=NULL, ...){
     orgs=c("athaliana","celegans","dmelanogaster","drerio","ecoli","hsapiens",
     "mmusculus","rnorvegicus","scerevisiae")
     if (species %in% orgs == FALSE ) {
@@ -75,10 +75,10 @@ getDee2Metadata<-function(species,outfile=NULL, ...){
 #' @keywords query
 #' @export
 #' @examples
-#' x<-queryDee2("ecoli",c("SRR1067773","SRR5350513"))
-queryDee2<-function(species, SRRvec,metadata=NULL, ...) {
+#' x<-queryDEE2("ecoli",c("SRR1067773","SRR5350513"))
+queryDEE2<-function(species, SRRvec,metadata=NULL, ...) {
     if(is.null(metadata)){
-        mdat<-getDee2Metadata(species, ...)
+        mdat<-getDEE2Metadata(species, ...)
     } else {
         mdat<-metadata
     }
@@ -227,7 +227,7 @@ loadQcMx<-function(zipname){
 #' @export
 #' @examples
 #' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
-#' y<-loadQcMx("mydata.zip")
+#' y<-loadSummaryMeta("mydata.zip")
 loadSummaryMeta<-function(zipname){
     FILELIST <- unzip(zipname,list=TRUE)$Name
     CM=FILELIST[grep("MetadataSummary.tsv",FILELIST)]
@@ -251,7 +251,7 @@ loadSummaryMeta<-function(zipname){
 #' @export
 #' @examples
 #' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
-#' y<-loadQcMx("mydata.zip")
+#' y<-loadFullMeta("mydata.zip")
 loadFullMeta<-function(zipname){
     FILELIST <- unzip(zipname,list=TRUE)$Name
     CM=FILELIST[grep("MetadataFull.tsv",FILELIST)]
@@ -355,9 +355,9 @@ getDEE2<-function(species, SRRvec, counts="GeneCounts", metadata=NULL,
     outfile=NULL, legacy=FALSE,
     baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
     if(is.null(metadata)){
-        dat1<-queryDee2(species, SRRvec)
+        dat1<-queryDEE2(species, SRRvec)
     } else {
-        dat1<-queryDee2(species, SRRvec,metadata=metadata)
+        dat1<-queryDEE2(species, SRRvec,metadata=metadata)
     }
     absent<-dat1$absent
     present<-dat1$present

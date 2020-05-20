@@ -17,7 +17,7 @@ This function loads the full metadata, which contains many fields.
 }
 \examples{
 x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
-y<-loadQcMx("mydata.zip")
+y<-loadFullMeta("mydata.zip")
 }
 \keyword{Load}
 \keyword{Metadata}

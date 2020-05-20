@@ -60,7 +60,7 @@ of RNA sequencing data and returns it as a SummarizedExperiment object.
 \examples{
 # Example workflow
 # Fetch metadata
-mdat<-getDee2Metadata("celegans")
+mdat<-getDEE2Metadata("celegans")
 # filter metadata for SRA project SRP009256
 mdat1<-mdat[which(mdat$SRP_accession \%in\% "SRP009256"),]
 # create a vector of SRA run accessions to fetch

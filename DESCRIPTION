@@ -1,6 +1,6 @@
 Package: getDEE2
 Title: Programmatic access to the DEE2 RNA expression dataset
-Version: 0.99.27
+Version: 0.99.28
 Authors@R: c(
     person(given = "Mark",
         family = "Ziemann",
@@ -28,3 +28,4 @@ LazyData: true
 RoxygenNote: 7.1.0
 biocViews: GeneExpression, Transcriptomics, Sequencing
 VignetteBuilder: knitr
+BugReport: https://github.com/markziemann/getDEE2

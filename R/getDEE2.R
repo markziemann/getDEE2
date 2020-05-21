@@ -433,12 +433,12 @@ list_bundles <- function(species){
         bundles <- htm2txt(readLines(BUNDLES_FILE))
         unlink(BUNDLES_FILE)
         bundles <- bundles[grep("RP",bundles)]
-        bundles <- t(data.frame(sapply(bundles,function(x) {
-            strsplit(x," ")  })))
+        bundles <- t(data.frame(vapply(X=bundles,FUN=function(x) {
+            strsplit(x," ")  },list(1))))
         bundles <- as.data.frame(bundles,stringsAsFactors=FALSE)
         rownames(bundles) <- seq(bundles[,1])
-        bundles$SRP <- sapply(strsplit(bundles[,1],"_"),"[[",1)
-        bundles$GSE <- sapply(strsplit(bundles[,1],"_"),"[[",2)
+        bundles$SRP <- unlist(lapply(strsplit(bundles[,1],"_"),"[[",1))
+        bundles$GSE <- unlist(lapply(strsplit(bundles[,1],"_"),"[[",2))
         bundles$GSE <- gsub(".zip","",bundles$GSE)
         colnames(bundles) <- c("file_name","date_added","time_added",
             "file_size","SRP_accession","GSE_accession")

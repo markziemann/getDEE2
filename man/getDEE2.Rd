@@ -60,13 +60,13 @@ of RNA sequencing data and returns it as a SummarizedExperiment object.
 \examples{
 # Example workflow
 # Fetch metadata
-mdat<-getDEE2Metadata("celegans")
+mdat <- getDEE2Metadata("celegans")
 # filter metadata for SRA project SRP009256
-mdat1<-mdat[which(mdat$SRP_accession \%in\% "SRP009256"),]
+mdat1 <- mdat[which(mdat$SRP_accession \%in\% "SRP009256"),]
 # create a vector of SRA run accessions to fetch
-SRRvec<-as.vector(mdat1$SRR_accession)
+SRRvec <- as.vector(mdat1$SRR_accession)
 # obtain the data as a SummarizedExperiment
-x<-getDEE2("celegans",SRRvec,metadata=mdat,counts="GeneCounts")
+x <- getDEE2("celegans",SRRvec,metadata=mdat,counts="GeneCounts")
 # Next, downstream analysis with your favourite Bioconductor tools :)
 x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"))
 }

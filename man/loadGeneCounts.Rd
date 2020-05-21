@@ -16,8 +16,8 @@ a dataframe of gene expression counts.
 This function loads STAR gene level counts from a downloaded zip file.
 }
 \examples{
-x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
-y<-loadGeneCounts("mydata.zip")
+x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+y <- loadGeneCounts("mydata.zip")
 }
 \keyword{Gene}
 \keyword{Load}

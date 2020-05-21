@@ -56,12 +56,12 @@ options for species currently are:
 If the species name is incorrect, an error will be thrown.
 
 ```{r, getmeta}
-mdat<-getDEE2Metadata("celegans")
+mdat <- getDEE2Metadata("celegans")
 head(mdat)
 ```
 
 If you have a SRA project accession number in mind already (eg: SRP009256)
-then we can see if the datasets are present.
+then we can see if the datasets are present. 
 
 ```{r, filtermeta}
 mdat[which(mdat$SRP_accession %in% "SRP009256"),]
@@ -71,8 +71,8 @@ DEE2 data is centred around SRA run accessions numbers, these SRR_accessions
 can be obtained like this:
 
 ```{r, getSRRs}
-mdat1<-mdat[which(mdat$SRP_accession %in% "SRP009256"),]
-SRRvec<-as.vector(mdat1$SRR_accession)
+mdat1 <- mdat[which(mdat$SRP_accession %in% "SRP009256"),]
+SRRvec <- as.vector(mdat1$SRR_accession)
 SRRvec
 ```
 
@@ -105,7 +105,7 @@ Here is an example of using the SRR vector as defined above.
 
 ```{r, example1}
 suppressPackageStartupMessages(library("SummarizedExperiment"))
-x<-getDEE2("celegans",SRRvec,metadata=mdat,counts="GeneCounts")
+x <- getDEE2("celegans",SRRvec,metadata=mdat,counts="GeneCounts")
 x
 # show sample level metadata
 colData(x)[1:7]
@@ -118,7 +118,7 @@ type them correctly. In case SRR accessions are not present in the database,
 there will be a warning message.
 
 ```{r, testabsent}
-x<-getDEE2("celegans",c("SRR363798","SRR363799","SRR3581689","SRR3581692"),
+x <- getDEE2("celegans",c("SRR363798","SRR363799","SRR3581689","SRR3581692"),
     metadata=mdat,counts="GeneCounts")
 ```
 
@@ -145,7 +145,7 @@ quality control data, sample metadata summary, sample metadata (full) and any
 absent datasets.
 
 ```{r, legacy}
-x<-getDEE2("celegans",SRRvec,metadata=mdat,legacy=TRUE)
+x <- getDEE2("celegans",SRRvec,metadata=mdat,legacy=TRUE)
 names(x)
 head(x$GeneCounts)
 head(x$TxCounts)
@@ -183,7 +183,7 @@ x <- getDEE2_bundle("athaliana", "SRP058781",
 ```
 
 Similarly, it is possible to search with GEO series numbers, as in the next
-example. 
+example.  
 
 ```{r,bundle2}
 x <- getDEE2_bundle("drerio", "GSE106677",
@@ -195,3 +195,4 @@ x <- getDEE2_bundle("drerio", "GSE106677",
 ```{r,sessioninfo,message=FALSE}
 sessionInfo()
 ```
+

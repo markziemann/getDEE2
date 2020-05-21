@@ -21,7 +21,7 @@ This function creates a SummarizedExperiment object from a legacy getDEE2
 dataset
 }
 \examples{
-x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),legacy=TRUE)
-y<-se(x)
+x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),legacy=TRUE)
+y <- se(x)
 }
 \keyword{SummarizedExperiment}

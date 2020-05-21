@@ -18,8 +18,8 @@ transcript lengths, corresponding parent gene accession and gene symbol
 that might be useful for downstream analysis.
 }
 \examples{
-x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
-y<-loadTxInfo("mydata.zip")
+x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+y <- loadTxInfo("mydata.zip")
 }
 \keyword{Load}
 \keyword{Transcript}

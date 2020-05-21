@@ -17,8 +17,8 @@ This function loads the summary metadata, which are the most relevant SRA
 accession numbers.
 }
 \examples{
-x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
-y<-loadSummaryMeta("mydata.zip")
+x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+y <- loadSummaryMeta("mydata.zip")
 }
 \keyword{Load}
 \keyword{Metadata}

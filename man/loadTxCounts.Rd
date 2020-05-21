@@ -17,8 +17,8 @@ This function loads Kallisto transcript level counts from a downloaded zip
 file.
 }
 \examples{
-x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
-y<-loadTxCounts("mydata.zip")
+x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+y <- loadTxCounts("mydata.zip")
 }
 \keyword{Load}
 \keyword{Transcript}

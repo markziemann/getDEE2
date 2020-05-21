@@ -23,6 +23,6 @@ a list of datasets that are present and absent.
 This function sends a query to check whether a dataset is available or not.
 }
 \examples{
-x<-queryDEE2("ecoli",c("SRR1067773","SRR5350513"))
+x <- queryDEE2("ecoli",c("SRR1067773","SRR5350513"))
 }
 \keyword{query}

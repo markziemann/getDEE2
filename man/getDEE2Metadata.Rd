@@ -20,6 +20,6 @@ a table of metadata.
 This function fetches the short metadata for the species of interest.
 }
 \examples{
-ecoli_metadata<-getDEE2Metadata("ecoli")
+ecoli_metadata <- getDEE2Metadata("ecoli")
 }
 \keyword{metadata}

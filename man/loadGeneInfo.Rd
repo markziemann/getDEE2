@@ -17,8 +17,8 @@ This function loads gene information. This information includes gene names
 and lengths which is useful for downstream analysis.
 }
 \examples{
-x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
-y<-loadGeneInfo("mydata.zip")
+x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+y <- loadGeneInfo("mydata.zip")
 }
 \keyword{Gene}
 \keyword{Load}

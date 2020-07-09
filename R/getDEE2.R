@@ -580,3 +580,35 @@ getDEE2_bundle <- function(species, query, col, counts="GeneCounts",
     }
 }
 
+#' Summarized run data to experiments
+#'
+#' Sometimes, each SRA experiment data is represented in two or more runs and
+#' they need to be aggregated.
+#' @param x a getDEE2 object.
+#' @param counts select "GeneCounts" for STAR based gene counts, "TxCounts" for
+#' kallisto transcript level counts or "Tx2Gene" for transcript counts
+#' aggregated to gene level. Default is "GeneCounts"
+#' @return a dataframe with gene expression data summarised to SRA experiment
+#' accession numbers rather than run accession numbers.
+#' @export
+#' @examples
+#' x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),legacy=TRUE)
+#' y <- srx_agg(x)
+srx_agg <- function(x,counts="GeneCounts") {
+    if (is(object = x,class2 = "SummarizedExperiment")) {
+        stop("This function works only for data obtained with legacy=TRUE")
+    }
+    IDX=which(names(x) %in% "GeneCounts")
+    mds<-x$MetadataSummary
+    n=nrow(x[[IDX]])
+    SRX_dat <- vapply(X=unique(mds$SRX_accession) ,function(srx) {
+        srrs<-rownames(mds)[which(mds$SRX_accession %in% srx)]
+        if (length(srrs)>1) {
+            rowSums(x[[IDX]][,srrs])
+        } else {
+            x[[IDX]][,srrs]
+        }
+    } , numeric(n))
+    rownames(SRX_dat) <- rownames(x[[IDX]])
+    SRX_dat
+}

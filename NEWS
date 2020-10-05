@@ -1,3 +1,7 @@
+CHANGES IN VERSION 0.99.31
+------------------------
+   o Fixed a bug that caused header swapping in summarised experiment data if SRRvec was not ordered.
+
 CHANGES IN VERSION 0.99.16
 ------------------------
    o Functions `getDee2Metadata` and `queryDee2` are now called 

@@ -1,6 +1,6 @@
 Package: getDEE2
 Title: Programmatic access to the DEE2 RNA expression dataset
-Version: 0.99.30
+Version: 0.99.31
 Authors@R: c(
     person(given = "Mark",
         family = "Ziemann",

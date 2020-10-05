@@ -374,7 +374,8 @@ se <- function(x,counts="GeneCounts"){
 getDEE2 <- function(species, SRRvec, counts="GeneCounts", metadata=NULL,
     outfile=NULL, legacy=FALSE,
     baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
-    if(is.null(metadata)){
+   SRRvec <- SRRvec[order(SRRvec)]
+   if(is.null(metadata)){
         dat1 <- queryDEE2(species, SRRvec)
     } else {
         dat1 <- queryDEE2(species, SRRvec,metadata=metadata)

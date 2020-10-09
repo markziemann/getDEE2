@@ -1,0 +1,15 @@
+citEntry(entry="article",
+         title = "Digital expression explorer 2: a repository of uniformly processed RNA sequencing data",
+         author = personList( as.person("Mark Ziemann"),
+                              as.person("Antony Kaspi"),
+                              as.person("Assam El-Osta")),
+         year = 2019,
+         journal = "Gigascience",
+         doi = "10.1093/gigascience/giz022",
+         volume = 8,
+         issue = 2019,
+         pages = 1-13,
+         textVersion = 
+         paste("Ziemann, M., Kaspi, A., El-Osta, A.", 
+               "Digital expression explorer 2: a repository of uniformly processed RNA sequencing data",
+                "Gigascience 8(2019):1-13 (2019)" ) )

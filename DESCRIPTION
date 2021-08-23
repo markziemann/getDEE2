@@ -1,6 +1,6 @@
 Package: getDEE2
 Title: Programmatic access to the DEE2 RNA expression dataset
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: c(
     person(given = "Mark",
         family = "Ziemann",
@@ -20,12 +20,12 @@ Description: Digital Expression Explorer 2 (or DEE2 for short) is a repository
     (https://doi.org/10.1093/gigascience/giz022).
 Depends: R (>= 4.0)
 Imports: stats, utils, SummarizedExperiment, htm2txt
-Suggests: knitr, testthat
+Suggests: knitr, testthat, rmarkdown
 License: GPL-3
 Encoding: UTF-8
 URL: https://github.com/markziemann/getDEE2
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 biocViews: GeneExpression, Transcriptomics, Sequencing
 VignetteBuilder: knitr
 BugReport: https://github.com/markziemann/getDEE2

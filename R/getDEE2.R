@@ -56,7 +56,7 @@ getURL <- function(URL, FUN, ..., N.TRIES=1L) {
 #' ecoli_metadata <- getDEE2Metadata("ecoli")
 getDEE2Metadata <- function(species,outfile=NULL, ...){
     orgs = c("athaliana","celegans","dmelanogaster","drerio","ecoli",
-    "hsapiens","mmusculus","rnorvegicus","scerevisiae")
+    "hsapiens","mmusculus","osativa","rnorvegicus","scerevisiae","zmays")
     if (species %in% orgs == FALSE ) {
         message(paste("Provided species '",species,"' is not found in the list.
         Check spelling and try again" ,sep=""))
@@ -442,7 +442,7 @@ getDEE2 <- function(species, SRRvec, counts="GeneCounts", metadata=NULL,
 #' bundles <- list_bundles("celegans")
 list_bundles <- function(species){
     orgs = c("athaliana","celegans","dmelanogaster","drerio","ecoli",
-    "hsapiens","mmusculus","rnorvegicus","scerevisiae")
+    "hsapiens","mmusculus","osativa","rnorvegicus","scerevisiae","zmays")
     if (species %in% orgs == FALSE ) {
         message(paste("Provided species '",species,"' is not found in the list.
         Check spelling and try again" ,sep=""))

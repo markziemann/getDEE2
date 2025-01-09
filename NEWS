@@ -1,3 +1,9 @@
+CHANGES IN VERSION 1.17.1
+------------------------
+   o Added support for O sativa (rice) and Z mays (corn) in the DEE2 database. 
+Thanks to Dr Wen-Dar Lin, Bioinformatician at IPMB, Academia Sinica, Taiwan, for contributing
+these data.
+
 CHANGES IN VERSION 0.99.31
 ------------------------
    o Fixed a bug that caused header swapping in summarised experiment data if SRRvec was not ordered.

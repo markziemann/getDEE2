@@ -49,9 +49,11 @@ options for species currently are:
 * drerio
 * ecoli
 * hsapiens
+* osativa
 * mmusculus
 * rnorvegicus
 * scerevisiae
+* zmays
 
 If the species name is incorrect, an error will be thrown.
 

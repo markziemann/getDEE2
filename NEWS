@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.17.3
+------------------------
+   o Better handling of exact query matches to bundle names.
+
 CHANGES IN VERSION 1.17.1
 ------------------------
    o Added support for O sativa (rice) and Z mays (corn) in the DEE2 database. 

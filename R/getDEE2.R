@@ -13,16 +13,15 @@
 #' @examples
 #' # Example workflow
 #' # Fetch metadata
-#' mdat <- getDEE2Metadata("celegans")
+#' mdat <- getDEE2Metadata(species="celegans")
 #' # filter metadata for SRA project SRP009256
 #' mdat1 <- mdat[which(mdat$SRP_accession %in% "SRP009256"),]
 #' # create a vector of SRA run accessions to fetch
 #' SRRvec <- as.vector(mdat1$SRR_accession)
 #' # obtain the data as a SummarizedExperiment
-#' x <- getDEE2("celegans",SRRvec,metadata=mdat,counts="GeneCounts")
+#' x <- getDEE2(species="celegans",SRRvec,metadata=mdat,counts="GeneCounts")
 #' # Next, downstream analysis with your favourite Bioconductor tools :)
 NULL
-
 
 getURL <- function(URL, FUN, ..., N.TRIES=1L) {
     N.TRIES <- as.integer(N.TRIES)
@@ -53,7 +52,7 @@ getURL <- function(URL, FUN, ..., N.TRIES=1L) {
 #' @import utils
 #' @export
 #' @examples
-#' ecoli_metadata <- getDEE2Metadata("ecoli")
+#' ecoli_metadata <- getDEE2Metadata(species="ecoli")
 getDEE2Metadata <- function(species,outfile=NULL, ...){
     orgs = c("athaliana","celegans","dmelanogaster","drerio","ecoli",
     "hsapiens","mmusculus","osativa","rnorvegicus","scerevisiae","zmays")
@@ -95,7 +94,7 @@ getDEE2Metadata <- function(species,outfile=NULL, ...){
 #' @keywords query
 #' @export
 #' @examples
-#' x <- queryDEE2("ecoli",c("SRR1067773","SRR5350513"))
+#' x <- queryDEE2(species="ecoli",SRRvec=c("SRR1067773","SRR5350513"))
 queryDEE2 <- function(species, SRRvec,metadata=NULL, ...) {
     if(is.null(metadata)){
         mdat <- getDEE2Metadata(species, ...)
@@ -117,7 +116,7 @@ queryDEE2 <- function(species, SRRvec,metadata=NULL, ...) {
 #' @import utils
 #' @export
 #' @examples
-#' x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' x <- getDEE2(species="ecoli",SRRvec=c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y <- loadGeneCounts("mydata.zip")
 loadGeneCounts <- function(zipname){
     FILELIST <- unzip(zipname,list=TRUE)$Name
@@ -142,7 +141,7 @@ loadGeneCounts <- function(zipname){
 #' @import utils
 #' @export
 #' @examples
-#' x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' x <- getDEE2(species="ecoli",SRRvec=c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y <- loadTxCounts("mydata.zip")
 loadTxCounts <- function(zipname){
     FILELIST <- unzip(zipname,list=TRUE)$Name
@@ -167,7 +166,7 @@ loadTxCounts <- function(zipname){
 #' @import utils
 #' @export
 #' @examples
-#' x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' x <- getDEE2(species="ecoli",SRRvec=c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y <- loadGeneInfo("mydata.zip")
 loadGeneInfo <- function(zipname){
     FILELIST <- unzip(zipname,list=TRUE)$Name
@@ -193,7 +192,7 @@ loadGeneInfo <- function(zipname){
 #' @import utils
 #' @export
 #' @examples
-#' x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' x <- getDEE2(species="ecoli",SRRvec=c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y <- loadTxInfo("mydata.zip")
 loadTxInfo <- function(zipname){
     FILELIST <- unzip(zipname,list=TRUE)$Name
@@ -219,7 +218,7 @@ loadTxInfo <- function(zipname){
 #' @import utils
 #' @export
 #' @examples
-#' x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' x <- getDEE2(species="ecoli",SRRvec=c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y <- loadQcMx("mydata.zip")
 loadQcMx <- function(zipname){
     FILELIST <- unzip(zipname,list=TRUE)$Name
@@ -246,7 +245,7 @@ loadQcMx <- function(zipname){
 #' @import utils
 #' @export
 #' @examples
-#' x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' x <- getDEE2(species="ecoli",SRRvec=c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y <- loadSummaryMeta("mydata.zip")
 loadSummaryMeta <- function(zipname){
     FILELIST <- unzip(zipname,list=TRUE)$Name
@@ -270,7 +269,7 @@ loadSummaryMeta <- function(zipname){
 #' @import utils
 #' @export
 #' @examples
-#' x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),outfile="mydata.zip")
+#' x <- getDEE2(species="ecoli",SRRvec=c("SRR1613487","SRR1613488"),outfile="mydata.zip")
 #' y <- loadFullMeta("mydata.zip")
 loadFullMeta <- function(zipname){
     FILELIST <- unzip(zipname,list=TRUE)$Name
@@ -296,7 +295,7 @@ loadFullMeta <- function(zipname){
 #' @importFrom stats aggregate
 #' @export
 #' @examples
-#' x <- getDEE2("scerevisiae",c("SRR1755149","SRR1755150"),legacy=TRUE)
+#' x <- getDEE2(species="scerevisiae",SRRvec=c("SRR1755149","SRR1755150"),legacy=TRUE)
 #' x <- Tx2Gene(x)
 Tx2Gene <- function(x){
     y <- merge(x$TxInfo,x$TxCounts,by=0)
@@ -322,7 +321,7 @@ Tx2Gene <- function(x){
 #' @import SummarizedExperiment 
 #' @export
 #' @examples
-#' x <- getDEE2("ecoli",c("SRR1613487","SRR1613488"),legacy=TRUE)
+#' x <- getDEE2(species="ecoli",SRRvec=c("SRR1613487","SRR1613488"),legacy=TRUE)
 #' y <- se(x)
 se <- function(x,counts="GeneCounts"){
     if ( (counts == "GeneCounts" ) | is.null(counts) ) {
@@ -370,7 +369,7 @@ se <- function(x,counts="GeneCounts"){
 #' @import SummarizedExperiment 
 #' @export
 #' @examples
-#' x<-getDEE2("ecoli",c("SRR1613487","SRR1613488"))
+#' x<-getDEE2(speciies="ecoli",SRRvec=c("SRR1613487","SRR1613488"))
 getDEE2 <- function(species, SRRvec, counts="GeneCounts", metadata=NULL,
     outfile=NULL, legacy=FALSE,
     baseURL="http://dee2.io/cgi-bin/request.sh?", ...){
@@ -483,7 +482,7 @@ list_bundles <- function(species){
 #' @keywords query
 #' @export
 #' @examples
-#' query_bundles("celegans", c("SRP133403","SRP133439"), col = "SRP_accession")
+#' query_bundles(species="celegans", query=c("SRP133403","SRP133439"), col = "SRP_accession")
 query_bundles <- function(species,query,col,bundles=NULL){
     cols <- c("file_name","date_added","time_added","file_size",
         "SRP_accession","GSE_accession")
@@ -535,7 +534,7 @@ query_bundles <- function(species,query,col,bundles=NULL){
 #' @import SummarizedExperiment 
 #' @export
 #' @examples
-#' x <- getDEE2_bundle("celegans", "SRP133403",col="SRP_accession")
+#' x <- getDEE2_bundle(species="celegans",query="SRP133403",col="SRP_accession")
 getDEE2_bundle <- function(species, query, col, counts="GeneCounts", 
     bundles=NULL, legacy=FALSE, baseURL="http://dee2.io/huge/", ...){
     if(is.null(bundles)){
@@ -552,6 +551,12 @@ getDEE2_bundle <- function(species, query, col, counts="GeneCounts",
     }
     zipname = paste(tempfile(),".zip",sep="")
     fname = bundles[which(bundles[,col] %in% query),1]
+    datcnt=length(fname)
+    if ( datcnt > 1 ) {
+      MSG <- paste("Note! Found",datcnt,"matches:", paste(as.character(fname),collapse=" "),
+        ". Returning only the first one")
+      fname <- fname[1]
+    }
     murl = paste(baseURL,species,"/",fname,sep="")
     getURL(URL=murl,FUN=download.file, N.TRIES=1L,
         destfile=zipname, mode = "wb" , ...)

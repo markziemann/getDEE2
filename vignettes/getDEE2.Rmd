@@ -43,17 +43,27 @@ The first step is to download the list of accession numbers of available
 datasets with the `getDEE2Metadata` function, specifying a species name.
 options for species currently are:
 
-* athaliana
-* celegans
-* dmelanogaster
-* drerio
-* ecoli
-* hsapiens
-* osativa
-* mmusculus
-* rnorvegicus
-* scerevisiae
-* zmays
+| Scientific name | Common name | DEE2 name | Organism group |
+| --- | --- | --- | --- |
+| <i>Caenorhabditis elegans</i> | Roundworm | celegans | animals |
+| <i>Drosophila melanogaster</i> | Fruitfly | dmelanogaster | animals |
+| <i>Danio rerio</i> | Zebrafish | drerio | animals |
+| <i>Homo sapiens</i> | Human | hsapiens | animals |
+| <i>Mus musculus</i> | Mouse | mmusculus | animals |
+| <i>Rattus norvegicus</i> | Rat | rnorvegicus | animals |
+| <i>Arabidopsis thaliana</i> | Thale cress | athaliana | plants |
+| <i>Brachypodium distachyon</i> | Purple false brome (grass) | bdistachyon | plants |
+| <i>Glycine max</i> | Soybean | gmax | plants |
+| <i>Hordeum vulgare</i> | Barley | hvulgare | plants |
+| <i>Oryza sativa</i> | Rice | osativa | plants |
+| <i>Populus trichocarpa</i> | Black cottonwood tree | ptrichocarpa | plants |
+| <i>Sorghum bicolor</i> | Sorghum | sbicolor | plants |
+| <i>Solanum lycopersicum</i> | Tomato | slycopersicum | plants |
+| <i>Solanum tuberosum</i> | Potato | stuberosum | plants |
+| <i>Triticum aestivum</i> | Wheat | taestivum | plants |
+| <i>Vitis vinifera</i> | Grapevine | vvinifera | plants |
+| <i>Escherichia coli</i> | E. coli | ecoli | microbes |
+| <i>Saccharomyces cerevisiae</i> | Yeast | scerevisiae | microbes |
 
 If the species name is incorrect, an error will be thrown.
 

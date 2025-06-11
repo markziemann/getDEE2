@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.17.4
+------------------------
+   o Addding support for new plant species bdistachyon, gmax, hvulgare, ptrichocarpa,
+sbicolor, slycopersicum, stuberosum, taestivum and vvinifera.
+
 CHANGES IN VERSION 1.17.3
 ------------------------
    o Better handling of exact query matches to bundle names.

@@ -1,17 +1,17 @@
 
 Package: getDEE2
 Title: Programmatic access to the DEE2 RNA expression dataset
-Version: 1.19.2
+Version: 1.19.3
 Authors@R: c(
     person(given = "Mark",
         family = "Ziemann",
         role = c("aut","cre"),
         email = "mark.ziemann@gmail.com",
-        orcid = "0000-0002-7688-6974"),
+        c(ORCID = "0000-0002-7688-6974")),
     person(given="Antony",
         family="Kaspi",
         role = c("aut"),
-        orcid = "0000-0001-6576-5862")
+        c(ORCID = "0000-0001-6576-5862"))
     )
 Description: Digital Expression Explorer 2 (or DEE2 for short) is a repository
     of processed RNA-seq data in the form of counts. It was designed so that

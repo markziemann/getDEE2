@@ -446,7 +446,7 @@ getDEE2 <- function(species, SRRvec, counts="GeneCounts", metadata=NULL,
 list_bundles <- function(species){
 
     orgs = c("athaliana","celegans","dmelanogaster","drerio","ecoli",
-    "hsapiens","mmusculus","osativa","rnorvegicus","scerevisiae","zmays"
+    "hsapiens","mmusculus","osativa","rnorvegicus","scerevisiae","zmays",
     "bdistachyon", "gmax", "hvulgare", "ptrichocarpa", "sbicolor",
     "slycopersicum", "stuberosum", "taestivum", "vvinifera")
 

@@ -1,12 +1,12 @@
 
 Package: getDEE2
 Title: Programmatic access to the DEE2 RNA expression dataset
-Version: 1.19.1
+Version: 1.19.2
 Authors@R: c(
     person(given = "Mark",
         family = "Ziemann",
         role = c("aut","cre"),
-        email = "mark.ziemann@gmail.com"
+        email = "mark.ziemann@gmail.com",
         orcid = "0000-0002-7688-6974"),
     person(given="Antony",
         family="Kaspi",
